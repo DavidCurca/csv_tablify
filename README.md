@@ -5,4 +5,4 @@ needs refactoring...
 
 ## prerequisites
 
-[wkhtmltopdf]:(https://wkhtmltopdf.org/)
+[wkhtmltopdf](https://wkhtmltopdf.org/)
