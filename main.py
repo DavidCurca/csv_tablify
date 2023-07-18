@@ -1,35 +1,35 @@
 import sys
 
-for arg in sys.argv:
-    if("data" in arg):
-        path = arg.split("=")[1]
-file = open(path, 'r')
-config = open("config.cfg", "r")
+configFile = open("config.cfg", "r")
+lines = configFile.readlines()
+config = {}
+
+for line in lines:
+    line = line.split("=")
+    line = map(str.strip, line)
+    key, value = line
+    config[key] = value
+
+csv = open(config['data'], 'r')
 template = open("static/index.html",  "r")
 
-lines = config.readlines()
-for line in lines:
-    if("name" in line):
-        line = line.split("=")[1].strip().replace("\"", "")
-        title = line
-
 table = ""
-first = file.readline().split(',')
+first = csv.readline().split(',')
 first[-1] = first[-1][:-1]
 first.insert(0, "Nr")
 
-def generateRow(list, className=None):
+def generateRow(list, firstRow=False):
     ans = ""
-    if(className):
-        ans += "<tr class=\"" + className + "\">"
+    if(firstRow):
+        ans += "<tr class=\"first_row\">"
     else:
         ans += "<tr>"
     for coloumn in list:
         ans += "<td>" + coloumn + "</td>"
     return ans
 
-table += generateRow(first, "first_row")
-lines = file.readlines()
+table += generateRow(first, True)
+lines = csv.readlines()
 place = 0
 for line in lines:
     place += 1
@@ -48,7 +48,7 @@ output = open("output.html", "w")
 
 for line in lines:
     if("$title$" in line):
-        output.write("<h1> REZULTATE " + title + "</h1>\n")
+        output.write("<h1> REZULTATE " + config['name'] + "</h1>\n")
     elif("$results$" in line):
         output.write(table + "\n")
     else:
