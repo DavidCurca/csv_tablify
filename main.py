@@ -4,7 +4,14 @@ for arg in sys.argv:
     if("data" in arg):
         path = arg.split("=")[1]
 file = open(path, 'r')
+config = open("config.cfg", "r")
 template = open("static/index.html",  "r")
+
+lines = config.readlines()
+for line in lines:
+    if("name" in line):
+        line = line.split("=")[1].strip().replace("\"", "")
+        title = line
 
 table = ""
 first = file.readline().split(',')
@@ -36,4 +43,15 @@ for line in lines:
         break
     table += generateRow(row)
 
-print(table)
+lines = template.readlines()
+output = open("output.html", "w")
+
+for line in lines:
+    if("$title$" in line):
+        output.write("<h1> REZULTATE " + title + "</h1>\n")
+    elif("$results$" in line):
+        output.write(table + "\n")
+    else:
+        output.write(line)
+
+
