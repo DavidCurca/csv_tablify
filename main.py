@@ -42,6 +42,7 @@ def generateRow(list, firstRow=False):
 table += generateRow(first, True)
 lines = csv.readlines()
 place = 0
+rows = []
 for line in lines:
     place += 1
     row = [str(place)] + [x if x != "-1" else "---" for x in line.split(",")]
@@ -52,6 +53,10 @@ for line in lines:
             numberNotSubmitted += 1
     if numberNotSubmitted == len(row)-3:
         break
+    if len(rows) > 0:
+        if(row[-1] == rows[-1][-1]):
+            row[0] = rows[-1][0]
+    rows.append(row)
     table += generateRow(row)
 
 lines = template.readlines()
